@@ -59,9 +59,9 @@ void usage(void)
         "   xmlstrings       Print the strings of the given compiled xml assets.\n\n", gProgName);
     fprintf(stderr,
         " %s p[ackage] [-d][-f][-m][-u][-v][-x][-z][-M AndroidManifest.xml] \\\n"
-        "        [-0 extension [-0 extension ...]] [-g tolerance] [-j jarfile] \\\n"
+        "        [-0 extension [-0 extension ...]] [-g tolerance] \\\n"
         "        [--debug-mode] [--min-sdk-version VAL] [--target-sdk-version VAL] \\\n"
-        "        [--app-version VAL] [--app-version-name TEXT] [--custom-package VAL] \\\n"
+        "        [--app-version VAL] [--app-version-name TEXT] \\\n"
         "        [--rename-manifest-package PACKAGE] \\\n"
         "        [--rename-instrumentation-target-package PACKAGE] \\\n"
         "        [--utf16] [--auto-add-overlay] \\\n"
@@ -70,7 +70,7 @@ void usage(void)
         "        [-A asset-source-dir]  [-G class-list-file] [-P public-definitions-file] \\\n"
         "        [-D main-dex-class-list-file] \\\n"
         "        [-S resource-sources [-S resource-sources ...]] \\\n"
-        "        [-F apk-file] [-J R-file-dir] \\\n"
+        "        [-F apk-file] [R-file-dir] \\\n"
         "        [--product product1,product2,...] \\\n"
         "        [-c CONFIGS] [--preferred-density DENSITY] \\\n"
         "        [--split CONFIGS [--split CONFIGS]] \\\n"
@@ -79,7 +79,7 @@ void usage(void)
         "        [--output-text-symbols DIR]\n"
         "\n"
         "   Package the android resources.  It will read assets and resources that are\n"
-        "   supplied with the -M -A -S or raw-files-dir arguments.  The -J -P -F and -R\n"
+        "   supplied with the -M -A -S or raw-files-dir arguments.  The -P -F and -R\n"
         "   options control which files are output.\n\n"
         , gProgName);
     fprintf(stderr,
@@ -112,9 +112,7 @@ void usage(void)
         "   -d  one or more device assets to include, separated by commas\n"
         "   -f  force overwrite of existing files\n"
         "   -g  specify a pixel tolerance to force images to grayscale, default 0\n"
-        "   -j  specify a jar or zip file containing classes to include\n"
         "   -k  junk path of file(s) added\n"
-        "   -m  make package directories under location specified by -J\n"
         "   -u  update existing packages (add new, replace older, remove deleted files)\n"
         "   -v  verbose output\n"
         "   -x  create extending (non-application) resource IDs\n"
@@ -125,7 +123,6 @@ void usage(void)
         "   -D  A file to output proguard options for the main dex into.\n"
         "   -F  specify the apk file to output\n"
         "   -I  add an existing package to base include set\n"
-        "   -J  specify where to output R.java resource constant definitions\n"
         "   -M  specify full path to AndroidManifest.xml to include in zip\n"
         "   -P  specify where to output public resource definitions\n"
         "   -S  directory in which to find resources.  Multiple directories will be scanned\n"
@@ -158,12 +155,6 @@ void usage(void)
         "       values will replace any value already in the manifest. By\n"
         "       default, nothing is changed if the manifest already defines\n"
         "       these attributes.\n"
-        "   --custom-package\n"
-        "       generates R.java into a different package.\n"
-        "   --extra-packages\n"
-        "       generate R.java for libraries. Separate libraries with ':'.\n"
-        "   --generate-dependencies\n"
-        "       generate dependency files in the same directories for R.java and resource package\n"
         "   --auto-add-overlay\n"
         "       Automatically add resources that are only in overlays.\n"
         "   --preferred-density\n"
@@ -223,9 +214,7 @@ void usage(void)
         "       Prevents symbols from being generated for strings that do not have a default\n"
         "       localization\n"
         "   --no-version-vectors\n"
-        "       Do not automatically generate versioned copies of vector XML resources.\n"
-        "   --private-symbols\n"
-        "       Java package name to use when generating R.java for private resources.\n",
+        "       Do not automatically generate versioned copies of vector XML resources.\n",
         gDefaultIgnoreAssets);
 }
 
@@ -375,7 +364,7 @@ int main(int argc, char **argv)
                 argc--;
                 argv++;
                 if (!argc) {
-                    fprintf(stderr, "ERROR: No argument supplied for '-j' option\n");
+                    fprintf(stderr, "AOPT: class injection is not implemented \n");
                     wantUsage = true;
                     goto bail;
                 }
@@ -441,7 +430,7 @@ int main(int argc, char **argv)
                 argc--;
                 argv++;
                 if (!argc) {
-                    fprintf(stderr, "ERROR: No argument supplied for '-J' option\n");
+                    fprintf(stderr, "AOPT: exporting R.java constants is not implemented \n");
                     wantUsage = true;
                     goto bail;
                 }
@@ -591,24 +580,6 @@ int main(int argc, char **argv)
                     bundle.setValues(true);
                 } else if (strcmp(cp, "-include-meta-data") == 0) {
                     bundle.setIncludeMetaData(true);
-                } else if (strcmp(cp, "-custom-package") == 0) {
-                    argc--;
-                    argv++;
-                    if (!argc) {
-                        fprintf(stderr, "ERROR: No argument supplied for '--custom-package' option\n");
-                        wantUsage = true;
-                        goto bail;
-                    }
-                    bundle.setCustomPackage(argv[0]);
-                } else if (strcmp(cp, "-extra-packages") == 0) {
-                    argc--;
-                    argv++;
-                    if (!argc) {
-                        fprintf(stderr, "ERROR: No argument supplied for '--extra-packages' option\n");
-                        wantUsage = true;
-                        goto bail;
-                    }
-                    bundle.setExtraPackages(argv[0]);
                 } else if (strcmp(cp, "-generate-dependencies") == 0) {
                     bundle.setGenDependencies(true);
                 } else if (strcmp(cp, "-utf16") == 0) {
