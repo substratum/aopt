@@ -41,7 +41,7 @@ int doVersion(Bundle* bundle)
     if (bundle->getFileSpecCount() != 0) {
         printf("(ignoring extra arguments)\n");
     }
-    printf("Android Asset Packaging Tool, v0.2-" AOPT_VERSION "\n");
+    printf("Android Overlay Packaging Tool, v0.2-" AOPT_VERSION "\n");
 
     return 0;
 }

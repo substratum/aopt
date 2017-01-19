@@ -42,8 +42,9 @@ void convertPath(char *path) {
  */
 void usage(void)
 {
-    fprintf(stderr, "Android Asset Packaging Tool\n\n");
-    fprintf(stderr, "Usage:\n");
+    fprintf(stderr, "==================================== \n");	
+    fprintf(stderr, "   Android Overlay Packaging Tool    \n");
+	fprintf(stderr, "==================================== \n");	
     fprintf(stderr,
         " %s l[ist] [-v] [-a] file.{zip,jar,apk}\n"
         "   List contents of Zip-compatible archive.\n\n", gProgName);
@@ -257,11 +258,12 @@ int handleCommand(Bundle* bundle)
 /*
  * Parse args.
  */
-int main(int argc, char* const argv[])
+int main(int argc, char **argv)
 {
     char *prog = argv[0];
     Bundle bundle;
     bool wantUsage = false;
+    bool wantHelp = false;
     int result = 1;    // pessimistically assume an error.
     int tolerance = 0;
 
@@ -269,8 +271,12 @@ int main(int argc, char* const argv[])
     bundle.setCompressionMethod(ZipEntry::kCompressDeflated);
 
     if (argc < 2) {
-        wantUsage = true;
-        goto bail;
+	fprintf(stderr, "==================================== \n");
+    fprintf(stderr, "Android Overlay Packaging Tool\n");
+	fprintf(stderr, "==================================== \n");	
+    fprintf(stderr,"   No arguments provided 				\n");
+	printf("   type --help for help \n");
+        return -1;
     }
 
     if (argv[1][0] == 'v')
@@ -292,8 +298,14 @@ int main(int argc, char* const argv[])
     else if (argv[1][0] == 'm')
         bundle.setCommand(kCommandDaemon);
     else {
+		if (strcmp(argv[1], "--help") == 0) {
+		wantHelp = true;
+		goto bail;
+	}
+    else {
         fprintf(stderr, "ERROR: Unknown command '%s'\n", argv[1]);
-        wantUsage = true;
+		printf("   type --help for help \n");
+		}
         goto bail;
     }
     argc -= 2;
@@ -742,8 +754,12 @@ int main(int argc, char* const argv[])
 
 bail:
     if (wantUsage) {
+        result = -1;
+    }
+    
+    if (wantHelp == true) {
         usage();
-        result = 2;
+        result = -1;
     }
 
     //printf("--> returning %d\n", result);

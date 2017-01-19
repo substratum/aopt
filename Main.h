@@ -18,6 +18,7 @@
 #include "ResourceFilter.h"
 #include "ZipFile.h"
 
+#define OS_PATH_SEPARATOR '/'
 
 /* Benchmarking Flag */
 //#define BENCHMARK 1

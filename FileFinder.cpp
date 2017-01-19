@@ -9,6 +9,7 @@
 #include <utils/String8.h>
 #include <utils/KeyedVector.h>
 
+#include <errno.h>
 #include <dirent.h>
 #include <sys/stat.h>
 
