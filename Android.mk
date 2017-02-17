@@ -44,8 +44,7 @@ aoptSources := \
     WorkQueue.cpp \
     XMLNode.cpp \
     ZipEntry.cpp \
-    ZipFile.cpp \
-    logstubs.cpp
+    ZipFile.cpp 
 
 aoptTests := \
     tests/AoptConfig_test.cpp \
@@ -109,6 +108,10 @@ aoptIncludes := \
         system/core/libziparchive \
         frameworks/base/libs/androidfw \
         frameworks/base/include/androidfw
+        
+
+FIND_HOSTOS := $(shell uname -s)
+HOST_NAME := $(shell echo $(FIND_HOSTOS) |sed -e s/L/l/ |sed -e s/D/d/ |sed s/W/w/ )
 
 # ==========================================================
 # Build the target static library: libandroidfw-static
@@ -219,7 +222,7 @@ aoptHostLdLibs_darwin := -lz
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := libaopt
-LOCAL_MODULE_HOST_OS := darwin linux windows
+LOCAL_MODULE_HOST_OS := $(HOST_NAME)
 LOCAL_CFLAGS := -Wno-format-y2k -DSTATIC_ANDROIDFW_FOR_TOOLS $(aoptHostCFlags)
 LOCAL_CPPFLAGS := $(aoptHostCppFlags)
 LOCAL_CFLAGS_darwin := -D_DARWIN_UNLIMITED_STREAMS
@@ -235,7 +238,7 @@ include $(BUILD_HOST_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := aopt
-LOCAL_MODULE_HOST_OS := darwin linux windows
+LOCAL_MODULE_HOST_OS := $(HOST_NAME)
 LOCAL_CFLAGS := $(aoptHostCFlags)
 LOCAL_CPPFLAGS := $(aoptHostCppFlags)
 LOCAL_LDLIBS_darwin := $(aoptHostLdLibs_darwin)
