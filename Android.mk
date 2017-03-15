@@ -118,7 +118,7 @@ HOST_NAME := $(shell echo $(FIND_HOSTOS) |sed -e s/L/l/ |sed -e s/D/d/ |sed s/W/
 # ==========================================================
 include $(CLEAR_VARS)
 
-ANDROIDFW_PATH := ../../libs/androidfw
+ANDROIDFW_PATH := androidfw
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_C_INCLUDES)
 
